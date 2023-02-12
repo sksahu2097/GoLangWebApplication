@@ -11,5 +11,5 @@ func Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTenplate(w, "aboutUs.html")
+	render.RenderTenplate(w, "aboutUs.page.tmpl")
 }

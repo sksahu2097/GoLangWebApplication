@@ -9,6 +9,7 @@ import (
 	"text/template"
 
 	"github.com/sksahu2097/go-project/pkg/config"
+	"github.com/sksahu2097/go-project/pkg/models"
 )
 
 // Render Template using html template
@@ -28,7 +29,7 @@ func SetTemplateAppConfig(a *config.AppConfig) {
 	app = a
 }
 
-func RenderTenplate(w http.ResponseWriter, tmpl string) {
+func RenderTenplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
 	//create the template cache
 	var tc map[string]*template.Template
 	if app.UseCache {
@@ -47,7 +48,7 @@ func RenderTenplate(w http.ResponseWriter, tmpl string) {
 
 	buff := new(bytes.Buffer)
 
-	err := t.Execute(buff, nil)
+	err := t.Execute(buff, td)
 	if err != nil {
 		log.Println(err)
 	}

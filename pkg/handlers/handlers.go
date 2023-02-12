@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/sksahu2097/go-project/pkg/config"
+	"github.com/sksahu2097/go-project/pkg/models"
 	"github.com/sksahu2097/go-project/pkg/render"
 )
 
@@ -25,9 +26,17 @@ func SetRepo(a *Repository) {
 }
 
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTenplate(w, "home.page.tmpl")
+	stringMap := make(map[string]string)
+	stringMap["Test"] = "my name is pojo"
+	render.RenderTenplate(w, "home.page.tmpl", &models.TemplateData{
+		StringMap: stringMap,
+	})
 }
 
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTenplate(w, "aboutUs.page.tmpl")
+	stringMap := make(map[string]string)
+	stringMap["Test"] = "my name is pojo"
+	render.RenderTenplate(w, "aboutUs.page.tmpl", &models.TemplateData{
+		StringMap: stringMap,
+	})
 }

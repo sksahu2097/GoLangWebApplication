@@ -23,10 +23,12 @@ func main() {
 	repo := handlers.NewRepo(&app)
 	handlers.SetRepo(repo)
 
-	http.HandleFunc("/", handlers.Repo.Home)
-	http.HandleFunc("/about", handlers.Repo.About)
-
 	fmt.Println("Starting the application on 8080")
-	_ = http.ListenAndServe(":8080", nil)
+	srv := &http.Server{
+		Addr:    ":8080",
+		Handler: routes(&app),
+	}
+	err = srv.ListenAndServe()
+	log.Fatal(err)
 
 }

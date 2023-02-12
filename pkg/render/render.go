@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"path/filepath"
 	"text/template"
+
+	"github.com/sksahu2097/go-project/pkg/config"
 )
 
 // Render Template using html template
@@ -19,23 +21,33 @@ func RenderTenplateTe(w http.ResponseWriter, tmpl string) {
 	}
 }
 
+var app *config.AppConfig
+
+// setTemplateAppconfig to resduce the boilerPlateCode
+func SetTemplateAppConfig(a *config.AppConfig) {
+	app = a
+}
+
 func RenderTenplate(w http.ResponseWriter, tmpl string) {
 	//create the template cache
-	tc, err := createTemplateCache()
-	if err != nil {
-		log.Fatal(err)
+	var tc map[string]*template.Template
+	if app.UseCache {
+		tc = app.TemplateCache
+	} else {
+		tc, _ = CreateTemplateCache()
 	}
+	tc = app.TemplateCache
 
 	//get requested template from cache
 	t, ok := tc[tmpl]
 
 	if !ok {
-		log.Fatal(err)
+		log.Fatal("Template not found in the Templates cache")
 	}
 
 	buff := new(bytes.Buffer)
 
-	err = t.Execute(buff, nil)
+	err := t.Execute(buff, nil)
 	if err != nil {
 		log.Println(err)
 	}
@@ -47,7 +59,7 @@ func RenderTenplate(w http.ResponseWriter, tmpl string) {
 
 }
 
-func createTemplateCache() (map[string]*template.Template, error) {
+func CreateTemplateCache() (map[string]*template.Template, error) {
 	myCache := make(map[string]*template.Template)
 
 	pages, err := filepath.Glob("./templates/*.page.tmpl")

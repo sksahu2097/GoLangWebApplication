@@ -14,6 +14,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Use(middleware.Logger)
 	mux.Use(writeToConsole)
 	mux.Use(NoSurf)
+	mux.Use(sessionLoad)
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)
 	return mux

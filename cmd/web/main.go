@@ -4,15 +4,29 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/sksahu2097/go-project/pkg/config"
 	"github.com/sksahu2097/go-project/pkg/handlers"
 	"github.com/sksahu2097/go-project/pkg/render"
 )
 
+var app config.AppConfig
+var session *scs.SessionManager
+
 func main() {
 
-	var app config.AppConfig
+	app.InProduction = false
+
+	session = scs.New()
+	session.Lifetime = 24 * time.Hour
+	session.Cookie.Persist = true
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.InProduction
+
+	app.Session = session
+
 	tc, err := render.CreateTemplateCache()
 
 	if err != nil {

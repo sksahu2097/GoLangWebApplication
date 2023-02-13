@@ -10,6 +10,7 @@ import (
 func writeToConsole(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Page hit = " + r.RequestURI)
+		fmt.Println("Remote Ip = " + r.RemoteAddr)
 		next.ServeHTTP(w, r)
 	})
 }
